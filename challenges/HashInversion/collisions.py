@@ -21,9 +21,12 @@ def receiveLine():
 receiveLine()
 receiveLine()
 msg1, msg2 = findCollision()
-receiveLine()
-rem.send(f"{msg1}\r\n")
-receiveLine()
-rem.send(f"{msg2}\r\n")
+
+if msg1 != "":
+    receiveLine()
+    rem.send(f"{msg1}\r\n")
+    receiveLine()
+    rem.send(f"{msg2}\r\n")
+    print(f"{rem.recvall().strip().decode()}")
 
 rem.close()
