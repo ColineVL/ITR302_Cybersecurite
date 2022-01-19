@@ -1,7 +1,6 @@
 # Libraries
 from pwn import *
 from parse import parse
-import hashlib
 
 # Connect to remote
 rem = remote("35.195.130.106", 17005)
@@ -44,10 +43,11 @@ while not stop:
             hash = parsed[0]
             rep = ""
 
+        # NB : we use https://hashes.com/en/decrypt/hash
         if hash == "1526f60c6e677d88ed77cd19075e1b8434cac2b4":
             rep = "love7"
         if hash == "da743904482e1958e440cb1197191615d80b0ed7":
-            rep = "6c69666530"
+            rep = "life0"
         if hash == "ac1634a13c4c923b50e10694cc1d3aae2686193f":
             rep = "rock4"
 
