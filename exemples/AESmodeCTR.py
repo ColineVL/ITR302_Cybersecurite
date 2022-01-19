@@ -1,0 +1,14 @@
+from email import message
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+keyS = "b4cf7094f32b8551ac39e841216e2c36cf3c63d4b6376aa5af025391c41c5979"
+key = bytes.fromhex(keyS)
+nonceS = "dd74f4335777bc4333e25fc7f8fe1a81"
+nonce = bytes.fromhex(nonceS)
+messageS = "7c1619f4128ab0338e204bd9611dd604973e11bbd0965aab04b4f957ec11f78b0141d871c6524953a5cac08adbf0bec2f73c85b6bc0e76aee8905b12541031745f86fb36c91f582eb5bfef35c9726a9f54f6edb24c0481b90ad802b25e3452eab591d2724d806217775389df29519e2c52d753cb9fae84c2d519008aad95961fda7549880ec1db446c5d90df7c4873727f6e3d06fd156694a91605419dddf6c42c20cbab228fa63bb1c5f5e67cc477ae1cd49e77ae092412fff23f125ab3954515fc515b662834e291dce3337c659f5532eb193e18c787f7def4dbb82d31201c9fb49d45be72d573fb4ec20fe550e17af553d3100aaeea14965a21b8a767d2a510978edf408accaf8af8d964dd5b24f1628ee56c0eed2a178debfa082f6312360fc16785dcb6"
+message = bytes.fromhex(messageS)
+
+cipher = Cipher(algorithms.AES(key), modes.CTR(nonce))
+decryptor = cipher.decryptor()
+test = decryptor.update(message) + decryptor.finalize()
+print(test)
