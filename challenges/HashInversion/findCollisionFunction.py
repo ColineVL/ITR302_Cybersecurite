@@ -3,7 +3,7 @@ import hashlib
 
 def findCollision():
     N = 16  # 48 premiers bits
-    n = 4
+    n = int(N / 4)
 
     # Je crée un dict : N premiers bits du hash en SHA-256 -> message
     myDict = {}
@@ -54,8 +54,8 @@ def findCollision():
     if flagFound:
         print("Collision trouvée")
         print(f"Messages : {msg1}, {msg2}")
-        hash1 = hashlib.sha256(msg1.encode()).hexdigest()[:12]
-        hash2 = hashlib.sha256(msg2.encode()).hexdigest()[:12]
+        hash1 = hashlib.sha256(msg1.encode()).hexdigest()[:n]
+        hash2 = hashlib.sha256(msg2.encode()).hexdigest()[:n]
         print(f"Hashes : {hash1}, {hash2}")
         return msg1, msg2
 
