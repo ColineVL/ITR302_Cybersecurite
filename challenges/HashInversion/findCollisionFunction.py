@@ -1,13 +1,26 @@
 import hashlib
 
+N = 48  # 48 premiers bits
+n = int(N / 4)
+
+# Je crée un dict : N premiers bits du hash en SHA-256 -> message
+myDict = {}
+
+
+def computeAndPutInDict(message):
+    # Je calcule le hash en SHA-256 du message
+    hash = hashlib.sha256(message.encode()).hexdigest()
+    firstChars = hash[:n]
+
+    # Je regarde si ce hash est dans le dict
+    if firstChars in myDict:
+        print("YAY! -------------")
+        return myDict[firstChars]
+    else:
+        myDict[firstChars] = message
+
 
 def findCollision():
-    N = 48  # 48 premiers bits
-    n = int(N / 4)
-
-    # Je crée un dict : N premiers bits du hash en SHA-256 -> message
-    myDict = {}
-
     flagFound = False
     msg1 = ""
     msg2 = ""
@@ -25,21 +38,23 @@ def findCollision():
     for message in array:
         # On ajoute un peu des mots pour avoir un array plus long
         for chiffre in range(50):
-            messageDerive = f"{chiffre}{message}"
+            messageDerive = f"{message}{chiffre}{message}"
+
             if not flagFound:
-
-                # Je calcule le hash en SHA-256 du message
-                hash = hashlib.sha256(messageDerive.encode()).hexdigest()
-                firstChars = hash[:n]
-
-                # Je regarde si ce hash est dans le dict
-                if firstChars in myDict:
-                    print("YAY! -------------")
+                result = computeAndPutInDict(messageDerive)
+                if result:
                     flagFound = True
-                    msg1 = myDict[firstChars]
+                    msg1 = result
                     msg2 = messageDerive
-                else:
-                    myDict[firstChars] = messageDerive
+
+            messageDerive2 = messageDerive.upper()
+
+            if not flagFound:
+                result = computeAndPutInDict(messageDerive2)
+                if result:
+                    flagFound = True
+                    msg1 = result
+                    msg2 = messageDerive2
 
     print(f"len du dict : {len(myDict.keys())}")
 
@@ -56,14 +71,14 @@ def findCollision():
         return "", ""
 
 
-findCollision()
+# findCollision()
 
 # Nb possibilités pour un hash de 48 bits : 2**48 = 281474976710656
 # 2**24 =
 # 16777216
 # J'en explore
-# 16654635
+# 37010300
 
 # Collision trouvée
-# Messages : aerohydropathy46, ammonoids14
-# Hashes : 7f292c2905, 7f292c2905
+# Messages : cybele11cybele, LAMIIDES44LAMIIDES
+# Hashes : 030751c4d66f, 030751c4d66f
