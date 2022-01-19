@@ -54,7 +54,6 @@ else:
 
         # Case : problem
         if "Wrong" in result:
-            stop = True
             print(f"NOPE {rem.recvall().strip().decode()}")
 
         # Case : we caught the flag
