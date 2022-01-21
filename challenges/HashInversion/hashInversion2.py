@@ -2,58 +2,45 @@
 from pwn import *
 from parse import parse
 
+from findPasswordFunction import findPassword
+
 # Connect to remote
 rem = remote("35.195.130.106", 17007)
 
 # Declarations
-stop = True
+stop = False
 
 
-def receiveLine():
+def receiveLine(i):
     reply = rem.readline()
     reply_as_a_string = reply.strip().decode()
-    print(f"REC {reply_as_a_string}")
+    print(f"REC {i} {reply_as_a_string}")
     return reply_as_a_string
 
 
 # Receive welcome
-receiveLine()
-receiveLine()
+receiveLine(0)
+# receiveLine()
 
-
+i = 0
 # Receive instructions
 while not stop:
-    line = receiveLine()
+    line = receiveLine(i)
+    i += 1
 
-    # Case : problem
-    if "Nope" in line:
-        stop = True
-        print(f"NOPE {rem.recvall().strip().decode()}")
+    if "message" in line:
+        # Parse
+        hash, salt = parse("What message hashes to {} with salt {}?", line)
+        if not hash:
+            raise Exception("Problem with parse")
 
-    # Case : we caught the flag
-    elif "Well done" in line:
-        stop = True
-        print(f"{rem.recvall().strip().decode()}")
+        # The attacker uses a word and a symbol, and a salt
+        # Let's do a brute force attack using a dictionnaire
+        rep = findPassword(hash)
+        rem.send(f"{rep}\r\n")
 
     else:
-        # Parse
-
-        parsed = parse("What message hashes to {}?", line)
-        if not parsed:
-            raise Exception("Problem with parse")
-        else:
-            hash = parsed[0]
-            rep = ""
-
-        # NB : we use https://hashes.com/en/decrypt/hash
-        if hash == "1526f60c6e677d88ed77cd19075e1b8434cac2b4":
-            rep = "love7"
-        if hash == "da743904482e1958e440cb1197191615d80b0ed7":
-            rep = "life0"
-        if hash == "ac1634a13c4c923b50e10694cc1d3aae2686193f":
-            rep = "rock4"
-
-        print(rep)
-        rem.send(f"{rep}\r\n")
+        stop = True
+        print(f"{rem.recvall().strip().decode()}")
 
 rem.close()
