@@ -1,30 +1,30 @@
 # Libraries
-import hashlib
 from parse import parse
-import base64
+import crypt
 
 
-def findAPassword(goal):
-
-    # Try to find a password arriving to this hash
+def getCommonPasswords():
     myFile = open("./useful/best110.txt", "r")
     array = myFile.readlines()
     myFile.close()
 
-    arrayStripped = [word.strip("\n") for word in array]
+    return [word.strip("\n") for word in array]
+
+
+def findAPassword(goal):
+    # On extrait le salt et le type
+    type, salt, _ = parse("${}${}${}", goal)
+    if not type:
+        raise Exception("Problem with parsing")
+
+    # Try to find a password arriving to this hash
+    arrayStripped = getCommonPasswords()
 
     for word in arrayStripped:
-        salt, hashedGoal = goal
-        test = f"{salt}{word}"
-        # Ils commencent tous par $6$ donc on utilise SHA-512
-        hashed = hashlib.sha512(test.encode()).hexdigest()
-        print(hashed)
-        print(hashedGoal)
-        test = base64.b64decode(hashedGoal).hex()
-        # Problème base 64 -> hex !!!
-        print(test)
-        if hashed == hashedGoal:
+        test = crypt.crypt(word, f"${type}${salt}")
+        if test == goal:
             return word
+
     return "found no password"
 
 
@@ -33,33 +33,17 @@ def getArrayHashes():
     rawArray = myFile.readlines()
     myFile.close()
 
-    arrayHashes = []
-
     # cf https://linuxize.com/post/etc-shadow-file/
-
-    for line in rawArray:
-        # On enlève les infos style username, expiration date...
-        encryptedPassword = line.split(":")[1]
-        # On découpe les 3 infos
-        type, salt, hashed = parse("${}${}${}", encryptedPassword)
-        if not type:
-            raise Exception("Problem with parsing")
-
-        if type != "6":
-            raise Exception("They do not all have type 6")
-
-        arrayHashes.append((salt, hashed))
-
-    print(arrayHashes)
-    return arrayHashes
+    # On enlève les infos style username, expiration date...
+    return [line.split(":")[1] for line in rawArray]
 
 
 def main():
     arrayHashes = getArrayHashes()
-
-    for goal in arrayHashes:
-        word = findAPassword(goal)
-        print(word)
+    result = [findAPassword(goal) for goal in arrayHashes]
+    # On retravaille le résultat pour obtenir une ligne :
+    # Please submit the passwords of the users following the order of the file separated by semicolons (no spaces).
+    print(";".join(result))
 
 
 main()
