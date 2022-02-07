@@ -16,12 +16,12 @@ from RSA import *
 # receiveLine()
 # receiveLine()
 
-message = "the side must be like a piece of music"
 mariaPrivee, mariaPublique = generationClePriveeEtPublique()
 raulPrivee, raulPublique = generationClePriveeEtPublique()
 
 # Maria envoie à Raul
-ciphertext, signature = envoyerMessageParRSA(message, mariaPublique, mariaPrivee)
+message = "the side must be like a piece of music"
+ciphertext, signature = envoyerMessageParRSA(message, raulPublique, mariaPrivee)
 
 # Raul recoit
 text = recevoirMessageParRSA(ciphertext, raulPrivee)
