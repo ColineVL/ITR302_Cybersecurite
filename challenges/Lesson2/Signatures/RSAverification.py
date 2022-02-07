@@ -14,18 +14,19 @@ def receiveLine():
 
 # Receive welcome
 receiveLine()
+
+# Je reçois la clé publique (PEM convertie en hex)
+
+parsed = parse(
+    'Please note my (serialized) RSA public keys (PEM format converted to a hex string): "{}"',
+    receiveLine(),
+)
+if not parsed:
+    raise Exception("Problem with parsing")
+
+clePublique = parsed[0]
+
+receiveLine()
 receiveLine()
 
-mariaPrivee, mariaPublique = generationClePriveeEtPublique()
-raulPrivee, raulPublique = generationClePriveeEtPublique()
-
-# Maria envoie à Raul
-message = "the side must be like a piece of music"
-ciphertext, signature = envoyerMessageParRSA(message, raulPublique, mariaPrivee)
-
-# Raul recoit
-text = recevoirMessageParRSA(ciphertext, raulPrivee)
-print(text)
-
-# Raul vérifie
-verifSignature(mariaPublique, signature, text)
+receiveLine()

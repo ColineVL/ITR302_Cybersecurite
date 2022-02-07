@@ -19,11 +19,14 @@ receiveLine()
 # Je send ma clé publique
 maPrivee, maPublique = generationClePriveeEtPublique()
 parsed = parse(
-    "-----BEGIN PUBLIC KEY-----\n{}\n-----END PUBLIC KEY-----\n", maPublique.decode()
+    "-----BEGIN PUBLIC KEY-----\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n-----END PUBLIC KEY-----\n",
+    maPublique.decode(),
 )
-print(maPublique.decode())
-truc = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwh26c0yaE5w0c5S71RQ6MlJPWmtxVkQD5WeDe5KD3xYZhSBQbW4Wm3PkVajAQGAFRYKQy8iUHA/qW8PIGVxlN+xgX2sBvOguArDr0RfYigA5cyW+Wo0vM8tfSStkrRYZALQXpXTT24x1cXgXy6vY6aOIWC9xegY6//JaUOdJnXx55mRgdmGLKKGc2ArhkJZNvj4CfpbwXigtzQdo+8D+9qHHEF5nANKlpciIIRfyjiRLCKQF53qLHtYMsaiA0m7wtJP5qSc+CiQyjBkPQbweXMm1OlpdWUPeuyBaIeqrjjJxckEORI9+tbljz0pJ9NUAD/yvPsiBYgrrDVcVPtborQIDAQAB-----END PUBLIC KEY-----"
-rem.send(f"{truc}\r\n")
+if not parsed:
+    raise Exception("Problem with parse")
+
+keyEncoded = "".join(parsed).encode().hex()
+rem.send(f"{keyEncoded}\r\n")
 
 
 receiveLine()
