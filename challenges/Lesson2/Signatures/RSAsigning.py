@@ -3,18 +3,18 @@ from parse import parse
 from RSA import *
 
 # Connect to remote
-# rem = remote("35.195.130.106", 17016)
+rem = remote("35.195.130.106", 17021)
 
 
-# def receiveLine():
-#     received = rem.readline().strip().decode()
-#     print(f"REC {received}")
-#     return received
+def receiveLine():
+    received = rem.readline().strip().decode()
+    print(f"REC {received}")
+    return received
 
 
 # Receive welcome
-# receiveLine()
-# receiveLine()
+receiveLine()
+receiveLine()
 
 mariaPrivee, mariaPublique = generationClePriveeEtPublique()
 raulPrivee, raulPublique = generationClePriveeEtPublique()
