@@ -24,9 +24,25 @@ parsed = parse(
 if not parsed:
     raise Exception("Problem with parsing")
 
-clePublique = parsed[0]
+clePublique = bytes.fromhex(parsed[0])
 
 receiveLine()
 receiveLine()
 
+for i in range(30):
+    parsed = parse('the signature of the text "{}" is "{}"', receiveLine())
+    if not parsed:
+        raise Exception("problem with parse")
+    text, signature = parsed
+    signature = bytes.fromhex(signature)
+
+    # Je vérifie si c'est correct
+    test = verifSignature(clePublique, signature, text)
+
+    # Je renvoie
+    reply = "true" if test else "false"
+    rem.send(f"{reply}\r\n")
+
+# Fin
+receiveLine()
 receiveLine()
