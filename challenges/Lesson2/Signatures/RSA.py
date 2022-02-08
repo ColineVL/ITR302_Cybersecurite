@@ -1,6 +1,6 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.asymmetric import padding, rsa, utils
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
@@ -81,3 +81,14 @@ def verifSignature(cle_publique_envoyeur, signature, plain_text_string):
     except InvalidSignature:
         print("Invalid signature")
         return False
+
+
+def signerAvecPrehashed(prehashed_msg, maClePrivee):
+    signature = maClePrivee.sign(
+        prehashed_msg,
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH
+        ),
+        utils.Prehashed(hashes.SHA256()),
+    )
+    return signature
