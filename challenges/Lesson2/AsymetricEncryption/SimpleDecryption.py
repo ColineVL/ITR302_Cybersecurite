@@ -18,15 +18,7 @@ receiveLine()
 
 # Je send ma clé publique
 maPrivee, maPublique = generationClePriveeEtPublique()
-parsed = parse(
-    "-----BEGIN PUBLIC KEY-----\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n-----END PUBLIC KEY-----\n",
-    maPublique.decode(),
-)
-if not parsed:
-    raise Exception("Problem with parse")
-
-keyEncoded = "".join(parsed).encode().hex()
-rem.send(f"{keyEncoded}\r\n")
+rem.send(f"{maPublique.hex()}\r\n")
 
 
 receiveLine()
