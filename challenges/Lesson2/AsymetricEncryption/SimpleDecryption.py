@@ -23,13 +23,17 @@ rem.send(f"{maPublique.hex()}\r\n")
 
 receiveLine()
 
-# # Maria envoie à Raul
-# message = "the side must be like a piece of music"
-# ciphertext, signature = envoyerMessageParRSA(message, raulPublique, mariaPrivee)
+# Récupérer ciphertext
+# parsed = parse("{}", receiveLine())
+# if not parsed:
+#     raise Exception("problem with parse")
+# ciphertext = parsed[0]
 
-# # Raul recoit
-# text = recevoirMessageParRSA(ciphertext, raulPrivee)
+# # Je décrypte le texte
+# text = recevoirMessageParRSA(ciphertext, maPrivee)
 # print(text)
 
-# # Raul vérifie
-# verifSignature(mariaPublique, signature, text)
+# rem.send(f"{text}\r\n")
+
+# receiveLine()
+# receiveLine()
