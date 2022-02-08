@@ -24,14 +24,11 @@ rem.send(f"{maPublique.hex()}\r\n")
 receiveLine()
 message = "Hello World"
 ciphertext, signature = envoyerMessageParRSA(message, maPublique, maPrivee)
-rem.send(f"{ciphertext}\r\n")
+rem.send(f"{message}\r\n")
 
 # J'envoie la signature
 receiveLine()
 rem.send(f"{signature.hex()}\r\n")
 
 receiveLine()
-
-# Je vérifie ma signature
-plain_text_string = recevoirMessageParRSA(ciphertext, maPrivee)
-verifSignature(maPublique, signature, plain_text_string)
+receiveLine()
