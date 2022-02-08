@@ -21,19 +21,23 @@ maPrivee, maPublique = generationClePriveeEtPublique()
 rem.send(f"{maPublique.hex()}\r\n")
 
 
+# Récupérer ciphertext
+parsed = parse(
+    'Thank you. The encrypted message (in hexadecimal form) is: "{}"', receiveLine()
+)
+
 receiveLine()
 
-# Récupérer ciphertext
-# parsed = parse("{}", receiveLine())
-# if not parsed:
-#     raise Exception("problem with parse")
-# ciphertext = parsed[0]
+if not parsed:
+    raise Exception("problem with parse")
+ciphertext = bytes.fromhex(parsed[0])
 
-# # Je décrypte le texte
-# text = recevoirMessageParRSA(ciphertext, maPrivee)
-# print(text)
+# Je décrypte le texte
 
-# rem.send(f"{text}\r\n")
+text = recevoirMessageParRSA(ciphertext, maPrivee)
+print(text)
 
-# receiveLine()
-# receiveLine()
+rem.send(f"{text}\r\n")
+
+receiveLine()
+receiveLine()
