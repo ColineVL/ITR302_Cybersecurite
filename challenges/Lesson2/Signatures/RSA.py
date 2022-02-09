@@ -79,16 +79,23 @@ def verifSignature(cle_publique_envoyeur, signature, plain_text_string):
         print("Signature correct")
         return True
     except InvalidSignature:
-        print("Invalid signature")
+        # print("Invalid signature")
         return False
 
 
-def signerAvecPrehashed(prehashed_msg, maClePrivee):
-    signature = maClePrivee.sign(
-        prehashed_msg,
-        padding.PSS(
-            mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH
-        ),
-        utils.Prehashed(hashes.SHA256()),
-    )
-    return signature
+def verifSignatureAvecPrehashed(cle_publique_envoyeur, signature, text_prehashed):
+    loaded_maria_key = load_pem_public_key(cle_publique_envoyeur)
+    try:
+        verifier = loaded_maria_key.verify(
+            signature,
+            text_prehashed,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH
+            ),
+            utils.Prehashed(hashes.SHA256()),
+        )
+        print("Signature correct")
+        return True
+    except InvalidSignature:
+        # print("Invalid signature")
+        return False

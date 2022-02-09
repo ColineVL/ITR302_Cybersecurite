@@ -6,11 +6,19 @@ import hashlib
 # Connect to remote
 rem = remote("35.195.130.106", 17018)
 
-
+# Definitions
 def receiveLine():
     received = rem.readline().strip().decode()
     print(f"REC {received}")
     return received
+
+
+# Je récupère des mots
+arrayWords = []
+with open("./useful/words_alpha.txt") as f:
+    arrayWords = f.readlines()
+for i in range(len(arrayWords) - 1):
+    arrayWords[i] = arrayWords[i].strip("\n")
 
 
 # Receive welcome
@@ -37,33 +45,27 @@ signature = bytes.fromhex(parsed2[1])
 receiveLine()
 
 # Je cherche un texte différent avec la même signature
-foundWord = ""
+foundWord = "nope"
 
-# Je récupère des mots
-arrayWords = []
-with open("./useful/words_alpha.txt") as f:
-    arrayWords = f.readlines()
-for i in range(len(arrayWords) - 1):
-    arrayWords[i] = arrayWords[i].strip("\n")
+# Tester pour différents messages
+for i, word in enumerate(arrayWords):
+    # Je préhashe le mot
+    prehashed = ""
 
+    m = hashlib.sha256(word.encode()).digest()
+    d = m[0:2].hex() + 60 * "0"
+    target_digest = bytes.fromhex(d)
 
-# word = "aah"
-# test = verifSignature(clePublique, signature, word)
-# if test:
-#     print("yes")
-# else:
-#     print("no")
+    test = verifSignatureAvecPrehashed(clePublique, signature, target_digest)
+    if test:
+        foundWord = word
+        break
+    if i % 5000 == 0:
+        print(f"Word {i}/{len(arrayWords)}")
+print(f"Mot trouvé : {foundWord}")
 
-# # Tester pour différents messages
-# for word in arrayWords:
-#     print(word.encode())
-#     prehashed_msg = hashlib.sha256(word.encode()).digest()
-#     d = prehashed_msg[0:2].hex() + 60 * "0"
-#     target_digest = bytes.fromhex(d)
-#     signatureTest = signerAvecPrehashed(target_digest, maPrivee).hex()
-#     assert len(signatureHex) == len(signatureTest)
-#     if signatureTest == signatureHex:
-#         foundWord = word
-#         print("TROUVEEEEEEEE")
-
-# # print(foundWord)
+# J'ai trouvé un message, je l'envoie
+rem.send(f"{foundWord}\r\n")
+receiveLine()
+receiveLine()
+receiveLine()
