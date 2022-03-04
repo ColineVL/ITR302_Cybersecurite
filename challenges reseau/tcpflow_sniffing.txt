@@ -1,0 +1,27 @@
+You have gained access to another attacker machine in the target network! Note that:
+
+Termshark has been banned from the system after your last attack.
+But this machine has tcpflow installed.
+Interface eth0 is connected to the Firewall through which you are penetrating.
+Interface eth1 is connected to a hub.
+An FTP client and server are also connected to the hub.
+Use the tcpflow command to sniff through your eth1 interface
+(tcpflow -h to see help on how to choose your interface) and capture the flag.
+This tool reconstructs TCP flows for you making it very easy to understand 
+what a, potentially long, set of TCP packets transported. 
+For a quick challenge solution you can use the -c option which outputs reconstructed flows 
+to the console. 
+However to train yourself for more complex scenarios you may want to not use -c 
+so that tcpflow writes down to local files each flow he captured (until you hit CTRL-C) 
+and then browse the files to search for the flag. 
+This will be useful when large flows need to be captured,
+e.g. when an FTP client downloads a large file.
+
+=============================
+
+ssh -i ~/.ssh/id_rsa_tunnelctf -l tunneluser -N -L 4001:10.107.1.21:22 35.233.20.31
+
+ssh -p 4001 root@127.0.0.1
+
+tcpflow -c -i eth1
+FLAG{e827275ef410d64be594fe745fe4ae2e8b3f8041}
