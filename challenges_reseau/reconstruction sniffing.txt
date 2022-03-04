@@ -1,0 +1,25 @@
+Sniffing a text flag is easy huh? 
+Now you have all the tools installed but the flag is in an image! Note that:
+
+Interface eth0 is connected to the Firewall through which you are penetrating.
+Interface eth1 is connected to a hub.
+An FTP client and server are also connected to the hub.
+Use the command you want to sniff through your eth1 interface. 
+Note that you will have to reconstruct the TCP flow and obtain a large file. 
+You are advised to use tcpflow without console mode. 
+As you cannot access the image locally 
+you need to exfiltrate the file to view it locally on your computer.
+
+Hint: base64 copy terminal contents 
+and base64 -d (see attached file if this is not enough)
+
+============================
+
+ssh -i ~/.ssh/id_rsa_tunnelctf -l tunneluser -N -L 4001:10.107.1.21:22 35.233.20.31
+ssh -p 4001 root@127.0.0.1
+
+tcpflow -i eth1
+ls 
+
+Dans un autre terminal, 
+scp -P 4001 root@127.0.0.1:./010.107.002.022.65108-010.107.002.021.48842 ./Documents/ITR302cybersecurite/challenges_reseau
