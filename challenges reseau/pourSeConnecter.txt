@@ -1,0 +1,14 @@
+ssh -i ~/.ssh/id_rsa_tunnelctf -l tunneluser -N -L 17000:127.0.0.1:17000 35.233.20.31
+
+Puis: 
+nc 127.0.0.1 17000
+
+Challenges possibles :
+termshark_sniffing_challenge.xml
+tcpflow_sniffing_challenge.xml
+tshark_sniffing_challenge.xml
+reconstruction_sniffing_challenge.xml
+ip_spoofing_challenge.xml
+
+Coline van Leeuwen
+TJB2mBmjEBYtM@rMy!qzLWxHE
