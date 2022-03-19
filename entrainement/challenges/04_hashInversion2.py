@@ -1,5 +1,3 @@
-import hmac
-
 from pwn import *
 from helper import readLine
 from parse import parse
@@ -34,5 +32,4 @@ while True:
             if result == hash:
                 r.send(f"{word}{symbol}\r\n")
 
-readLine(r)
 readLine(r)
