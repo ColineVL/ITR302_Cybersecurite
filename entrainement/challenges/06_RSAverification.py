@@ -14,7 +14,7 @@ r = remote("35.195.130.106", 17017)
 
 readLine(r)
 line = readLine(r).decode().strip()
-parsed = parse('{}string): "{}"', line)
+parsed = parse('{}: "{}"', line)
 if not parsed:
     raise Exception
 publicKey = bytes.fromhex(parsed[1])
@@ -29,9 +29,10 @@ for i in range(30):
         raise Exception
     _, message, sig = parsed
 
+    # vérification
+    public_key = load_pem_public_key(publicKey)
     try:
-        loaded_maria_key = load_pem_public_key(publicKey)
-        verifier = loaded_maria_key.verify(
+        public_key.verify(
             bytes.fromhex(sig),
             message.encode(),
             padding.PSS(
@@ -41,7 +42,6 @@ for i in range(30):
         )
         r.send(f"true\r\n")
     except InvalidSignature:
-        print("Invalid signature")
         r.send(f"false\r\n")
 
 
