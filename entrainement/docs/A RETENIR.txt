@@ -1,25 +1,15 @@
 with open(chemin) as file:
     for line in file:
         do something with line
-
-    
-
 -------------------
-
-
 symbols = string.punctuation
-
-
----------------------
+--------------------
 love7
 rock4
 life0
-
 --------------
-
 salt word symbol
-
-------------------
-
-
+-----------------
 string.upper()
+-----------------------
+RSA verif : pas de documentation ???
