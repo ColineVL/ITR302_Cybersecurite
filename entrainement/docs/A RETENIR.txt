@@ -18,3 +18,8 @@ life0
 --------------
 
 salt word symbol
+
+------------------
+
+
+string.upper()
